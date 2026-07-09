@@ -1,0 +1,13 @@
+target/
+.env
+.vscode/
+.idea/
+.DS_Store
+
+**/*.rs.bk
+
+Cargo.lock
+
+node_modules/
+
+*.log
