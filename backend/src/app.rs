@@ -1,13 +1,11 @@
-use axum::{
-    routing::get,
-    Router,
-};
+use axum::Router;
+use sqlx::PgPool;
 
-async fn health() -> &'static str {
-    "OK"
-}
+use crate::routes;
 
-pub fn create_app() -> Router {
+
+
+pub fn create_app(_pool: PgPool) -> Router {
     Router::new()
-        .route("/health", get(health))
+        .merge(routes::router())
 }

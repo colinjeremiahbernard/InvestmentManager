@@ -15,6 +15,7 @@ pub struct User {
 }
 
 // Incoming registration request
+#[derive(Debug, Deserialize)]
 pub struct CreateUserRequest {
     pub first_name: String,
     pub last_name: String,
@@ -24,12 +25,14 @@ pub struct CreateUserRequest {
 }
 
 // Login request
+#[derive(Debug, Deserialize)]
 pub struct LoginRequest {
     pub email: String,
     pub password: String,
 }
 
 // Response sent to the frontend
+#[derive(Debug, Deserialize)]
 pub struct UserResponse {
     pub id: Uuid,
     pub first_name: String,
