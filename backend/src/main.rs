@@ -5,6 +5,11 @@ mod app;
 mod config;
 mod database;
 mod routes;
+mod handlers;
+mod models;
+mod services;
+mod repository;
+mod error;
 
 #[tokio::main]
 async fn main() -> Result<()> {
