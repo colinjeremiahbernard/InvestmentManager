@@ -16,4 +16,5 @@ pub fn router() -> Router<AppState> {
     Router::new()
         .route("/health", get(health))
         .route("/register", post(auth::register))
+        .route("/login", post(auth::login))
 }

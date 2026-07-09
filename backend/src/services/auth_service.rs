@@ -1,9 +1,10 @@
-use password_auth::generate_hash;
+use password_auth::{generate_hash, verify_password};
 
 use crate::{
     error::app_error::AppError,
     models::user::{
         CreateUserRequest,
+        LoginRequest,
         NewUser,
         UserResponse,
     },
@@ -60,6 +61,31 @@ impl AuthService {
             last_name: created.last_name,
             username: created.username,
             email: created.email,
+        })
+    }
+        pub async fn login(
+        &self,
+        request: LoginRequest,
+    ) -> Result<UserResponse, AppError> {
+
+        let user = self
+            .repository
+            .find_by_email(&request.email)
+            .await?
+            .ok_or(AppError::InvalidCredentials)?;
+
+        verify_password(
+            request.password,
+            &user.password_hash,
+        )
+        .map_err(|_| AppError::InvalidCredentials)?;
+
+        Ok(UserResponse {
+            id: user.id,
+            first_name: user.first_name,
+            last_name: user.last_name,
+            username: user.username,
+            email: user.email,
         })
     }
 }
