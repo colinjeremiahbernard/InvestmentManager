@@ -1,10 +1,11 @@
 use password_auth::{generate_hash, verify_password};
-
+use crate::auth::jwt::create_token;
 use crate::{
     error::app_error::AppError,
     models::user::{
         CreateUserRequest,
         LoginRequest,
+        LoginResponse,
         NewUser,
         UserResponse,
     },
@@ -13,11 +14,15 @@ use crate::{
 
 pub struct AuthService {
     repository: UserRepository,
+    jwt_secret: String,
 }
 
 impl AuthService {
-    pub fn new(repository: UserRepository) -> Self {
-        Self { repository }
+    pub fn new(
+        repository: UserRepository,
+        jwt_secret: String,
+    ) -> Self {
+        Self { repository, jwt_secret, }
     }
 
     pub async fn register(
@@ -66,7 +71,7 @@ impl AuthService {
         pub async fn login(
         &self,
         request: LoginRequest,
-    ) -> Result<UserResponse, AppError> {
+    ) -> Result<LoginResponse, AppError> {
 
         let user = self
             .repository
@@ -80,12 +85,21 @@ impl AuthService {
         )
         .map_err(|_| AppError::InvalidCredentials)?;
 
-        Ok(UserResponse {
+       let token = create_token(
+            user.id,
+            &self.jwt_secret,
+)
+            .map_err(|_| AppError::Internal)?;
+
+        Ok(LoginResponse {
+            user: UserResponse {
             id: user.id,
             first_name: user.first_name,
             last_name: user.last_name,
             username: user.username,
             email: user.email,
-        })
+       },
+        token,
+})
     }
 }

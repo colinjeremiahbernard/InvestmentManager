@@ -16,7 +16,10 @@ pub async fn register(
     Json(request): Json<CreateUserRequest>,
 ) -> impl IntoResponse {
     let repository = UserRepository::new(state.pool.clone());
-    let service = AuthService::new(repository);
+    let service = AuthService::new(
+        repository,
+        state.jwt_secret.clone(),
+    );
 
     match service.register(request).await {
         Ok(user) => (StatusCode::CREATED, Json(user)).into_response(),
@@ -29,7 +32,10 @@ pub async fn login(
     Json(request): Json<LoginRequest>,
 ) -> impl IntoResponse {
     let repository = UserRepository::new(state.pool.clone());
-    let service = AuthService::new(repository);
+    let service = AuthService::new(
+        repository, 
+        state.jwt_secret.clone(),
+    );
 
     match service.login(request).await {
         Ok(user) => (StatusCode::OK, Json(user)).into_response(),

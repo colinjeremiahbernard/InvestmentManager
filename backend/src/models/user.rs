@@ -49,3 +49,8 @@ pub struct UserResponse {
     pub username: String,
     pub email: String,
 }
+#[derive(Debug, Serialize)]
+pub struct LoginResponse {
+    pub user: UserResponse,
+    pub token: String,
+}

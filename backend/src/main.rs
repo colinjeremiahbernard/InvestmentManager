@@ -10,6 +10,7 @@ mod models;
 mod services;
 mod repository;
 mod error;
+mod auth;
 
 #[tokio::main]
 async fn main() -> Result<()> {
@@ -22,7 +23,10 @@ async fn main() -> Result<()> {
 
 println!("✅ Connected to PostgreSQL");
 
-    let app = app::create_app(pool);
+    let app = app::create_app(
+        pool,
+        settings.jwt_secret,
+    );
 
     let listener = TcpListener::bind("127.0.0.1:3000").await?;
 
