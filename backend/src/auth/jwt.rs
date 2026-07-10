@@ -1,5 +1,8 @@
 use chrono::{Duration, Utc};
 use jsonwebtoken::{
+    decode,
+    DecodingKey,
+    Validation,
     encode,
     EncodingKey,
     Header,
@@ -33,4 +36,16 @@ pub fn create_token(
         &claims,
         &EncodingKey::from_secret(secret.as_bytes()),
     )
+}
+pub fn verify_token(
+    token: &str,
+    secret: &str,
+) -> Result<Claims, jsonwebtoken::errors::Error> {
+    let token_data = decode::<Claims>(
+        token,
+        &DecodingKey::from_secret(secret.as_bytes()),
+        &Validation::default(),
+    )?;
+
+    Ok(token_data.claims)
 }

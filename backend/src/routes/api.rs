@@ -5,7 +5,7 @@ use axum::{
 
 use crate::{
     app::AppState,
-    handlers::auth
+    handlers::{auth, me},
 };
 
 async fn health() -> &'static str {
@@ -17,4 +17,5 @@ pub fn router() -> Router<AppState> {
         .route("/health", get(health))
         .route("/register", post(auth::register))
         .route("/login", post(auth::login))
+        .route("/me", get(me::me))
 }
