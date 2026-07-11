@@ -76,6 +76,7 @@ fn asset_to_response(asset: Asset) -> AssetResponse {
         asset_type: asset.asset_type,
         exchange: asset.exchange,
         currency: asset.currency,
+        current_price: asset.current_price,
         is_active: asset.is_active,
     }
 }

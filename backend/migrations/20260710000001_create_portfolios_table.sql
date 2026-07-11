@@ -6,7 +6,6 @@ CREATE TABLE portfolios (
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
-
 CREATE TABLE portfolio_items (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   portfolio_id UUID NOT NULL REFERENCES portfolios(id) ON DELETE CASCADE,
@@ -17,10 +16,3 @@ CREATE TABLE portfolio_items (
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
-
--- Add current_price to assets for live P&L calculation
-ALTER TABLE assets ADD COLUMN current_price DOUBLE PRECISION NOT NULL DEFAULT 0.0;
-
-CREATE INDEX idx_portfolios_user_id ON portfolios(user_id);
-CREATE INDEX idx_portfolio_items_portfolio_id ON portfolio_items(portfolio_id);
-CREATE INDEX idx_portfolio_items_asset_id ON portfolio_items(asset_id);
