@@ -11,7 +11,7 @@ pub enum AppError {
     #[error("Invalid email or password")]
     InvalidCredentials,
 
-    #[error("Database error")]
+    #[error("Database error: {0}")]
     Database(#[from] sqlx::Error),
 
     #[error("Password hashing failed")]
@@ -19,4 +19,22 @@ pub enum AppError {
 
     #[error("Internal server error")]
     Internal,
+
+    #[error("Asset already exists")]
+    AssetAlreadyExists,
+
+    #[error("Asset not found")]
+    AssetNotFound,
+
+    #[error("Portfolio not found")]
+    PortfolioNotFound,
+
+    #[error("Portfolio item not found")]
+    PortfolioItemNotFound,
+
+    #[error("Not authorized")]
+    NotAuthorized,
+
+    #[error("Insufficient quantity")]
+    InsufficientQuantity,
 }
