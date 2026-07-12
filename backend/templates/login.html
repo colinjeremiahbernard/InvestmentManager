@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block title %}
+Login
+{% endblock %}
+
+{% block content %}
+
+<div class="row justify-content-center mt-5">
+
+  <div class="col-md-5">
+
+    <div class="card shadow">
+
+      <div class="card-header">
+        <h3 class="text-center">Sign In</h3>
+      </div>
+
+      <div class="card-body">
+
+        <div id="error" class="alert alert-danger d-none"></div>
+
+        <form id="loginForm">
+
+          <div class="mb-3">
+
+            <label class="form-label">Email</label>
+
+            <input id="email" type="email" class="form-control" required>
+
+          </div>
+
+          <div class="mb-3">
+
+            <label class="form-label">Password</label>
+
+            <input id="password" type="password" class="form-control" required>
+
+          </div>
+
+          <button class="btn btn-primary w-100">
+
+            Login
+
+          </button>
+
+        </form>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+
+  document.getElementById("loginForm").onsubmit = async (e) => {
+
+    e.preventDefault();
+
+    const response = await fetch("/api/login", {
+
+      method: "POST",
+
+      headers: {
+        "Content-Type": "application/json"
+      },
+
+      body: JSON.stringify({
+
+        email: email.value,
+
+        password: password.value
+
+      })
+
+    });
+
+    if (!response.ok) {
+
+      const error = document.getElementById("error");
+
+      error.innerHTML = "Invalid email or password.";
+
+      error.classList.remove("d-none");
+
+      return;
+
+    }
+
+    const data = await response.json();
+
+    localStorage.setItem("token", data.token);
+
+    location = "/dashboard";
+
+  };
+
+</script>
+
+{% endblock %}

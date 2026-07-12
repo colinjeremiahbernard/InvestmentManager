@@ -37,4 +37,7 @@ pub enum AppError {
 
     #[error("Insufficient quantity")]
     InsufficientQuantity,
+
+    #[error("Transaction not found")]
+    TransactionNotFound,
 }

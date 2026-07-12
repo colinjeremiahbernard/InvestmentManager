@@ -5,7 +5,14 @@ use axum::{
 
 use crate::{
     app::AppState,
-    handlers::{asset, auth, dashboard, me, portfolio},
+    handlers::{
+        asset,
+        auth,
+        dashboard,
+        me,
+        portfolio,
+        transaction,
+    },
 };
 
 async fn health() -> &'static str {
@@ -37,4 +44,10 @@ pub fn router() -> Router<AppState> {
         .route("/api/portfolios/{id}/items", post(portfolio::add_item))
         .route("/api/portfolios/{portfolio_id}/items/{item_id}", put(portfolio::update_item))
         .route("/api/portfolios/{portfolio_id}/items/{item_id}", delete(portfolio::remove_item))
+        // Transactions
+        .route("/api/transactions", post(transaction::create))
+        .route("/api/transactions", get(transaction::list))
+        .route("/api/transactions/{id}", get(transaction::get))
+        .route("/api/transactions/{id}", put(transaction::update))
+        .route("/api/transactions/{id}", delete(transaction::delete))
 }

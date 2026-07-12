@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block title %}
+Portfolio
+{% endblock %}
+
+{% block sidebar %}
+{% include "partials/sidebar.html" %}
+{% endblock %}
+
+{% block content %}
+
+<h2 id="portfolioName"></h2>
+
+<p id="portfolioDescription" class="text-muted"></p>
+
+<div class="row mb-4">
+
+  <div class="col-md-3">
+
+    <div class="card">
+
+      <div class="card-body">
+
+        <h6>Total Invested</h6>
+
+        <h3 id="totalInvested">$0.00</h3>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="col-md-3">
+
+    <div class="card">
+
+      <div class="card-body">
+
+        <h6>Current Value</h6>
+
+        <h3 id="currentValue">$0.00</h3>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="col-md-3">
+
+    <div class="card">
+
+      <div class="card-body">
+
+        <h6>Gain / Loss</h6>
+
+        <h3 id="gainLoss">$0.00</h3>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="col-md-3">
+
+    <div class="card">
+
+      <div class="card-body">
+
+        <h6>Return</h6>
+
+        <h3 id="gainPct">0%</h3>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<table class="table table-striped">
+
+  <thead>
+
+    <tr>
+
+      <th>Symbol</th>
+
+      <th>Name</th>
+
+      <th>Qty</th>
+
+      <th>Purchase</th>
+
+      <th>Current</th>
+
+      <th>Gain</th>
+
+    </tr>
+
+  </thead>
+
+  <tbody id="portfolioItems">
+
+  </tbody>
+
+</table>
+
+<script src="/static/js/portfolio-detail.js"></script>
+
+{% endblock %}
