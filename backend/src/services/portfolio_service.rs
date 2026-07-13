@@ -34,6 +34,73 @@ impl PortfolioService {
     ) -> Result<Vec<Portfolio>, AppError> {
         self.repository.list_by_user(user_id).await.map_err(AppError::from)
     }
+    pub async fn summary(
+    &self,
+    user_id: Uuid,
+) -> Result<PortfolioDetailResponse, AppError> {
+
+    let portfolios = self
+        .repository
+        .list_by_user(user_id)
+        .await?;
+
+    let mut total_invested = 0.0;
+    let mut total_value = 0.0;
+
+    for portfolio in &portfolios {
+
+        let items = self
+            .repository
+            .list_items(portfolio.id)
+            .await?;
+
+        total_invested += items
+            .iter()
+            .map(|i| i.total_invested)
+            .sum::<f64>();
+
+        total_value += items
+            .iter()
+            .map(|i| i.current_value)
+            .sum::<f64>();
+    }
+
+    let total_gain_loss =
+        total_value - total_invested;
+
+    let total_gain_loss_pct =
+        if total_invested == 0.0 {
+
+            0.0
+
+        } else {
+
+            total_gain_loss
+                / total_invested
+                * 100.0
+
+        };
+
+    Ok(PortfolioDetailResponse {
+
+        id: Uuid::nil(),
+
+        name: "All Portfolios".to_string(),
+
+        description: None,
+
+        items: Vec::new(),
+
+        total_invested,
+
+        total_value,
+
+        total_gain_loss,
+
+        total_gain_loss_pct,
+
+    })
+}
 
     pub async fn get_detail(
         &self,

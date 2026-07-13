@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Dashboard{% endblock %}
+{% block title %}Reports{% endblock %}
 
 {% block sidebar %}
 {% include "partials/sidebar.html" %}
@@ -10,7 +10,11 @@
 
 <div class="container-fluid">
 
-  <div class="row mb-4">
+  <h2 class="mb-4">
+    Portfolio Reports
+  </h2>
+
+  <div class="row g-4">
 
     <div class="col-lg-3">
 
@@ -19,12 +23,12 @@
         <div class="card-body">
 
           <small class="text-muted">
-            Portfolio Value
+            Total Invested
           </small>
 
-          <h2 id="portfolioValue">
+          <h3 id="reportInvested">
             $0.00
-          </h2>
+          </h3>
 
         </div>
 
@@ -39,12 +43,12 @@
         <div class="card-body">
 
           <small class="text-muted">
-            Total Invested
+            Current Value
           </small>
 
-          <h2 id="totalInvested">
+          <h3 id="reportValue">
             $0.00
-          </h2>
+          </h3>
 
         </div>
 
@@ -62,9 +66,9 @@
             Gain / Loss
           </small>
 
-          <h2 id="gainLoss">
+          <h3 id="reportGain">
             $0.00
-          </h2>
+          </h3>
 
         </div>
 
@@ -82,9 +86,10 @@
             Return
           </small>
 
-          <h2 id="returnPct">
+          <h3 id="reportReturn">
             0%
-          </h2>
+
+          </h3>
 
         </div>
 
@@ -94,45 +99,17 @@
 
   </div>
 
-  <div class="row">
+  <div class="card shadow-sm mt-4">
 
-    <div class="col-lg-8">
+    <div class="card-header">
 
-      <div class="card shadow-sm">
-
-        <div class="card-header">
-
-          Portfolio Overview
-
-        </div>
-
-        <div class="card-body">
-
-          <canvas id="portfolioChart" height="120">
-
-          </canvas>
-
-        </div>
-
-      </div>
+      Portfolio Performance
 
     </div>
 
-    <div class="col-lg-4">
+    <div class="card-body">
 
-      <div class="card shadow-sm">
-
-        <div class="card-header">
-
-          Recent Transactions
-
-        </div>
-
-        <div id="recentTransactions" class="list-group list-group-flush">
-
-        </div>
-
-      </div>
+      <canvas id="reportChart"></canvas>
 
     </div>
 
@@ -141,6 +118,6 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="/static/js/dashboard.js"></script>
+<script src="/static/js/reports.js"></script>
 
 {% endblock %}

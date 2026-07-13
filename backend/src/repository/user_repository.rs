@@ -1,6 +1,11 @@
 use sqlx::PgPool;
-
-use crate::models::user::{NewUser, User};
+use uuid::Uuid;
+use crate::models::user::{
+    UpdateUserRequest,
+    UserResponse,
+    NewUser,
+    User,
+};
 
 pub struct UserRepository {
     pool: PgPool,
@@ -58,6 +63,30 @@ impl UserRepository {
         .fetch_optional(&self.pool)
         .await
     }
+    pub async fn find_by_id(
+    &self,
+    id: Uuid,
+) -> Result<UserResponse, sqlx::Error> {
+
+    let user = sqlx::query_as!(
+        UserResponse,
+        r#"
+        SELECT
+            id,
+            first_name,
+            last_name,
+            username,
+            email
+        FROM users
+        WHERE id = $1
+        "#,
+        id
+    )
+    .fetch_one(&self.pool)
+    .await?;
+
+    Ok(user)
+}
 
     pub async fn create_user(
         &self,
@@ -92,4 +121,41 @@ impl UserRepository {
         .fetch_one(&self.pool)
         .await
     }
+    pub async fn update_user(
+    &self,
+    id: Uuid,
+    request: UpdateUserRequest,
+) -> Result<UserResponse, sqlx::Error> {
+
+    let user = sqlx::query_as!(
+        UserResponse,
+
+        r#"
+        UPDATE users
+        SET
+            first_name=$1,
+            last_name=$2,
+            username=$3,
+            email=$4
+        WHERE id=$5
+        RETURNING
+            id,
+            first_name,
+            last_name,
+            username,
+            email
+        "#,
+
+        request.first_name,
+        request.last_name,
+        request.username,
+        request.email,
+        id
+
+    )
+    .fetch_one(&self.pool)
+    .await?;
+
+    Ok(user)
+}
 }

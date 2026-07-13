@@ -1,8 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}
-Portfolio
-{% endblock %}
+{% block title %}Portfolio{% endblock %}
 
 {% block sidebar %}
 {% include "partials/sidebar.html" %}
@@ -10,21 +8,123 @@ Portfolio
 
 {% block content %}
 
-<h2 id="portfolioName"></h2>
+<div class="container-fluid">
 
-<p id="portfolioDescription" class="text-muted"></p>
+  <div id="alertContainer"></div>
 
-<div class="row mb-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
 
-  <div class="col-md-3">
+    <div>
 
-    <div class="card">
+      <h2 id="portfolioName">Portfolio</h2>
 
-      <div class="card-body">
+      <p id="portfolioDescription" class="text-muted mb-0">
 
-        <h6>Total Invested</h6>
+      </p>
 
-        <h3 id="totalInvested">$0.00</h3>
+    </div>
+
+    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#holdingModal">
+
+      Add Holding
+
+    </button>
+
+  </div>
+
+  <div class="row mb-4">
+
+    <div class="col-lg-3">
+
+      <div class="card shadow-sm">
+
+        <div class="card-body">
+
+          <small class="text-muted">
+
+            Total Invested
+
+          </small>
+
+          <h3 id="totalInvested">
+
+            $0.00
+
+          </h3>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="col-lg-3">
+
+      <div class="card shadow-sm">
+
+        <div class="card-body">
+
+          <small class="text-muted">
+
+            Current Value
+
+          </small>
+
+          <h3 id="currentValue">
+
+            $0.00
+
+          </h3>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="col-lg-3">
+
+      <div class="card shadow-sm">
+
+        <div class="card-body">
+
+          <small class="text-muted">
+
+            Gain / Loss
+
+          </small>
+
+          <h3 id="gainLoss">
+
+            $0.00
+
+          </h3>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="col-lg-3">
+
+      <div class="card shadow-sm">
+
+        <div class="card-body">
+
+          <small class="text-muted">
+
+            Return
+
+          </small>
+
+          <h3 id="gainLossPct">
+
+            0%
+
+          </h3>
+
+        </div>
 
       </div>
 
@@ -32,47 +132,131 @@ Portfolio
 
   </div>
 
-  <div class="col-md-3">
+  <div class="card shadow-sm">
 
-    <div class="card">
+    <div class="card-header">
 
-      <div class="card-body">
+      Holdings
 
-        <h6>Current Value</h6>
+    </div>
 
-        <h3 id="currentValue">$0.00</h3>
+    <div class="table-responsive">
 
-      </div>
+      <table class="table table-hover mb-0">
+
+        <thead>
+
+          <tr>
+
+            <th>Symbol</th>
+
+            <th>Name</th>
+
+            <th>Quantity</th>
+
+            <th>Purchase</th>
+
+            <th>Current</th>
+
+            <th>Invested</th>
+
+            <th>Value</th>
+
+            <th>Gain/Loss</th>
+
+            <th width="160">
+
+              Actions
+
+            </th>
+
+          </tr>
+
+        </thead>
+
+        <tbody id="holdingsTable">
+
+        </tbody>
+
+      </table>
 
     </div>
 
   </div>
 
-  <div class="col-md-3">
+</div>
 
-    <div class="card">
+<!-- Holding Modal -->
 
-      <div class="card-body">
+<div class="modal fade" id="holdingModal">
 
-        <h6>Gain / Loss</h6>
+  <div class="modal-dialog">
 
-        <h3 id="gainLoss">$0.00</h3>
+    <div class="modal-content">
+
+      <div class="modal-header">
+
+        <h5 id="holdingModalTitle" class="modal-title">
+
+          Add Holding
+
+        </h5>
+
+        <button class="btn-close" data-bs-dismiss="modal">
+
+        </button>
 
       </div>
 
-    </div>
+      <div class="modal-body">
 
-  </div>
+        <form id="holdingForm">
 
-  <div class="col-md-3">
+          <div class="mb-3">
 
-    <div class="card">
+            <label class="form-label">
 
-      <div class="card-body">
+              Asset
 
-        <h6>Return</h6>
+            </label>
 
-        <h3 id="gainPct">0%</h3>
+            <select id="assetSelect" class="form-select">
+
+            </select>
+
+          </div>
+
+          <div class="mb-3">
+
+            <label class="form-label">
+
+              Quantity
+
+            </label>
+
+            <input id="quantity" type="number" step="0.01" class="form-control">
+
+          </div>
+
+          <div class="mb-4">
+
+            <label class="form-label">
+
+              Purchase Price
+
+            </label>
+
+            <input id="purchasePrice" type="number" step="0.01" class="form-control">
+
+          </div>
+
+          <button class="btn btn-success w-100">
+
+            Save Holding
+
+          </button>
+
+        </form>
 
       </div>
 
@@ -81,34 +265,6 @@ Portfolio
   </div>
 
 </div>
-
-<table class="table table-striped">
-
-  <thead>
-
-    <tr>
-
-      <th>Symbol</th>
-
-      <th>Name</th>
-
-      <th>Qty</th>
-
-      <th>Purchase</th>
-
-      <th>Current</th>
-
-      <th>Gain</th>
-
-    </tr>
-
-  </thead>
-
-  <tbody id="portfolioItems">
-
-  </tbody>
-
-</table>
 
 <script src="/static/js/portfolio-detail.js"></script>
 

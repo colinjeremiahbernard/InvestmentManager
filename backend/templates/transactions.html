@@ -1,0 +1,207 @@
+{% extends "base.html" %}
+
+{% block title %}Transactions{% endblock %}
+
+{% block sidebar %}
+{% include "partials/sidebar.html" %}
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+  <div id="alertContainer"></div>
+
+  <div class="d-flex justify-content-between align-items-center mb-4">
+
+    <div>
+
+      <h2 class="mb-0">Transactions</h2>
+
+      <small class="text-muted">
+
+        Record buy and sell operations
+
+      </small>
+
+    </div>
+
+    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#transactionModal">
+
+      New Transaction
+
+    </button>
+
+  </div>
+
+  <div class="card shadow-sm">
+
+    <div class="card-body">
+
+      <div class="table-responsive">
+
+        <table class="table table-hover align-middle">
+
+          <thead>
+
+            <tr>
+
+              <th>Date</th>
+              <th>Portfolio</th>
+              <th>Asset</th>
+              <th>Type</th>
+              <th>Quantity</th>
+              <th>Price</th>
+              <th>Amount</th>
+              <th width="170">Actions</th>
+
+            </tr>
+
+          </thead>
+
+          <tbody id="transactionsTable">
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- Modal -->
+
+<div class="modal fade" id="transactionModal" tabindex="-1">
+
+  <div class="modal-dialog">
+
+    <div class="modal-content">
+
+      <div class="modal-header">
+
+        <h5 id="transactionModalTitle" class="modal-title">
+
+          New Transaction
+
+        </h5>
+
+        <button class="btn-close" data-bs-dismiss="modal">
+
+        </button>
+
+      </div>
+
+      <div class="modal-body">
+
+        <form id="transactionForm">
+
+          <div class="mb-3">
+
+            <label class="form-label">
+
+              Portfolio
+
+            </label>
+
+            <select id="portfolioSelect" class="form-select" required>
+
+            </select>
+
+          </div>
+
+          <div class="mb-3">
+
+            <label class="form-label">
+
+              Asset
+
+            </label>
+
+            <select id="assetSelect" class="form-select" required>
+
+            </select>
+
+          </div>
+
+          <div class="mb-3">
+
+            <label class="form-label">
+
+              Transaction Type
+
+            </label>
+
+            <select id="transactionType" class="form-select">
+
+              <option value="Buy">Buy</option>
+              <option value="Sell">Sell</option>
+
+            </select>
+
+          </div>
+
+          <div class="row">
+
+            <div class="col-md-6 mb-3">
+
+              <label class="form-label">
+
+                Quantity
+
+              </label>
+
+              <input id="quantity" type="number" step="0.01" class="form-control" required>
+
+            </div>
+
+            <div class="col-md-6 mb-3">
+
+              <label class="form-label">
+
+                Price
+
+              </label>
+
+              <input id="price" type="number" step="0.01" class="form-control" required>
+
+            </div>
+
+          </div>
+
+          <div class="mb-4">
+
+            <label class="form-label">
+
+              Notes
+
+            </label>
+
+            <textarea id="notes" rows="3" class="form-control">
+
+</textarea>
+
+          </div>
+
+          <button class="btn btn-success w-100">
+
+            Save Transaction
+
+          </button>
+
+        </form>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<script src="/static/js/transactions.js"></script>
+
+{% endblock %}
