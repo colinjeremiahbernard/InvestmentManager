@@ -1,16 +1,10 @@
-use password_auth::{generate_hash, verify_password};
 use crate::auth::jwt::create_token;
 use crate::{
     error::app_error::AppError,
-    models::user::{
-        CreateUserRequest,
-        LoginRequest,
-        LoginResponse,
-        NewUser,
-        UserResponse,
-    },
+    models::user::{CreateUserRequest, LoginRequest, LoginResponse, NewUser, UserResponse},
     repository::user_repository::UserRepository,
 };
+use password_auth::{generate_hash, verify_password};
 
 pub struct AuthService {
     repository: UserRepository,
@@ -18,18 +12,14 @@ pub struct AuthService {
 }
 
 impl AuthService {
-    pub fn new(
-        repository: UserRepository,
-        jwt_secret: String,
-    ) -> Self {
-        Self { repository, jwt_secret, }
+    pub fn new(repository: UserRepository, jwt_secret: String) -> Self {
+        Self {
+            repository,
+            jwt_secret,
+        }
     }
 
-    pub async fn register(
-        &self,
-        request: CreateUserRequest,
-    ) -> Result<UserResponse, AppError> {
-
+    pub async fn register(&self, request: CreateUserRequest) -> Result<UserResponse, AppError> {
         if self
             .repository
             .find_by_email(&request.email)
@@ -68,38 +58,27 @@ impl AuthService {
             email: created.email,
         })
     }
-        pub async fn login(
-        &self,
-        request: LoginRequest,
-    ) -> Result<LoginResponse, AppError> {
-
+    pub async fn login(&self, request: LoginRequest) -> Result<LoginResponse, AppError> {
         let user = self
             .repository
             .find_by_email(&request.email)
             .await?
             .ok_or(AppError::InvalidCredentials)?;
 
-        verify_password(
-            request.password,
-            &user.password_hash,
-        )
-        .map_err(|_| AppError::InvalidCredentials)?;
+        verify_password(request.password, &user.password_hash)
+            .map_err(|_| AppError::InvalidCredentials)?;
 
-       let token = create_token(
-            user.id,
-            &self.jwt_secret,
-)
-            .map_err(|_| AppError::Internal)?;
+        let token = create_token(user.id, &self.jwt_secret).map_err(|_| AppError::Internal)?;
 
         Ok(LoginResponse {
             user: UserResponse {
-            id: user.id,
-            first_name: user.first_name,
-            last_name: user.last_name,
-            username: user.username,
-            email: user.email,
-       },
-        token,
-})
+                id: user.id,
+                first_name: user.first_name,
+                last_name: user.last_name,
+                username: user.username,
+                email: user.email,
+            },
+            token,
+        })
     }
 }

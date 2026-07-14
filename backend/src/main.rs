@@ -2,16 +2,16 @@ use color_eyre::Result;
 use tokio::net::TcpListener;
 
 mod app;
+mod auth;
 mod config;
 mod database;
-mod routes;
-mod handlers;
-mod models;
-mod services;
-mod repository;
 mod error;
-mod auth;
+mod handlers;
 mod middleware;
+mod models;
+mod repository;
+mod routes;
+mod services;
 
 #[tokio::main]
 async fn main() -> Result<()> {

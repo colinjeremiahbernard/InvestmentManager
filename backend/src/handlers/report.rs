@@ -1,12 +1,7 @@
-use axum::{
-    extract::State,
-    response::IntoResponse,
-    Json,
-};
+use axum::{Json, extract::State, response::IntoResponse};
 
 use crate::{
-    app::AppState,
-    auth::extractor::AuthenticatedUser,
+    app::AppState, auth::extractor::AuthenticatedUser,
     repository::portfolio_repository::PortfolioRepository,
 };
 
@@ -19,13 +14,15 @@ pub async fn summary(
 
     let portfolios = match repository.list_by_user(user_id).await {
         Ok(p) => p,
-        Err(_) => return Json(serde_json::json!({
-            "total_invested":0.0,
-            "total_value":0.0,
-            "total_gain_loss":0.0,
-            "total_gain_loss_pct":0.0,
-            "portfolios":[]
-        })),
+        Err(_) => {
+            return Json(serde_json::json!({
+                "total_invested":0.0,
+                "total_value":0.0,
+                "total_gain_loss":0.0,
+                "total_gain_loss_pct":0.0,
+                "portfolios":[]
+            }));
+        }
     };
 
     let mut total_invested = 0.0;
@@ -34,17 +31,14 @@ pub async fn summary(
     let mut chart = Vec::new();
 
     for portfolio in portfolios {
-
         let items = repository
             .list_items(portfolio.id)
             .await
             .unwrap_or_default();
 
-        let invested: f64 =
-            items.iter().map(|i| i.total_invested).sum();
+        let invested: f64 = items.iter().map(|i| i.total_invested).sum();
 
-        let value: f64 =
-            items.iter().map(|i| i.current_value).sum();
+        let value: f64 = items.iter().map(|i| i.current_value).sum();
 
         total_invested += invested;
         total_value += value;

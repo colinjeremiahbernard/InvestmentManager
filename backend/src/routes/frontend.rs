@@ -1,18 +1,15 @@
 use axum::{
+    Router,
     extract::{Path, State},
     response::{Html, IntoResponse},
     routing::get,
-    Router,
 };
 
+use crate::app::AppState;
 use tera::Context;
 use uuid::Uuid;
-use crate::app::AppState;
 
-async fn index(
-    State(state): State<AppState>,
-) -> impl IntoResponse {
-
+async fn index(State(state): State<AppState>) -> impl IntoResponse {
     let html = state
         .tera
         .render("index.html", &Context::new())
@@ -21,10 +18,7 @@ async fn index(
     Html(html)
 }
 
-async fn login(
-    State(state): State<AppState>,
-) -> impl IntoResponse {
-
+async fn login(State(state): State<AppState>) -> impl IntoResponse {
     let html = state
         .tera
         .render("login.html", &Context::new())
@@ -33,10 +27,7 @@ async fn login(
     Html(html)
 }
 
-async fn register(
-    State(state): State<AppState>,
-) -> impl IntoResponse {
-
+async fn register(State(state): State<AppState>) -> impl IntoResponse {
     let html = state
         .tera
         .render("register.html", &Context::new())
@@ -45,10 +36,7 @@ async fn register(
     Html(html)
 }
 
-async fn dashboard(
-    State(state): State<AppState>,
-) -> impl IntoResponse {
-
+async fn dashboard(State(state): State<AppState>) -> impl IntoResponse {
     let html = state
         .tera
         .render("dashboard.html", &Context::new())
@@ -56,10 +44,7 @@ async fn dashboard(
 
     Html(html)
 }
-async fn assets(
-    State(state): State<AppState>,
-) -> impl IntoResponse {
-
+async fn assets(State(state): State<AppState>) -> impl IntoResponse {
     let html = state
         .tera
         .render("assets.html", &Context::new())
@@ -68,10 +53,7 @@ async fn assets(
     Html(html)
 }
 
-async fn portfolios(
-    State(state): State<AppState>,
-) -> impl IntoResponse {
-
+async fn portfolios(State(state): State<AppState>) -> impl IntoResponse {
     let html = state
         .tera
         .render("portfolios.html", &Context::new())
@@ -80,10 +62,7 @@ async fn portfolios(
     Html(html)
 }
 
-async fn transactions(
-    State(state): State<AppState>,
-) -> impl IntoResponse {
-
+async fn transactions(State(state): State<AppState>) -> impl IntoResponse {
     let html = state
         .tera
         .render("transactions.html", &Context::new())
@@ -92,10 +71,7 @@ async fn transactions(
     Html(html)
 }
 
-async fn reports(
-    State(state): State<AppState>,
-) -> impl IntoResponse {
-
+async fn reports(State(state): State<AppState>) -> impl IntoResponse {
     let html = state
         .tera
         .render("reports.html", &Context::new())
@@ -104,10 +80,7 @@ async fn reports(
     Html(html)
 }
 
-async fn settings(
-    State(state): State<AppState>,
-) -> impl IntoResponse {
-
+async fn settings(State(state): State<AppState>) -> impl IntoResponse {
     let html = state
         .tera
         .render("settings.html", &Context::new())
@@ -119,13 +92,9 @@ async fn portfolio_detail(
     State(state): State<AppState>,
     Path(_id): Path<Uuid>,
 ) -> impl IntoResponse {
-
     let html = state
         .tera
-        .render(
-            "portfolio_detail.html",
-            &tera::Context::new()
-        )
+        .render("portfolio_detail.html", &tera::Context::new())
         .unwrap();
 
     Html(html)
@@ -142,7 +111,5 @@ pub fn router() -> Router<AppState> {
         .route("/transactions", get(transactions))
         .route("/reports", get(reports))
         .route("/settings", get(settings))
-        .route("/portfolio/{id}",
-         get(portfolio_detail))
-        
+        .route("/portfolio/{id}", get(portfolio_detail))
 }

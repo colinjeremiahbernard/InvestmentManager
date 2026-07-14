@@ -1,17 +1,14 @@
 use axum::{
+    Json,
     extract::{Path, State},
     http::StatusCode,
     response::IntoResponse,
-    Json,
 };
 use uuid::Uuid;
 
 use crate::{
-    app::AppState,
-    auth::extractor::AuthenticatedUser,
-    repository::asset_repository::AssetRepository,
-    services::asset_service::AssetService,
-    models::asset::CreateAssetRequest,
+    app::AppState, auth::extractor::AuthenticatedUser, models::asset::CreateAssetRequest,
+    repository::asset_repository::AssetRepository, services::asset_service::AssetService,
 };
 
 pub async fn create(
@@ -27,10 +24,7 @@ pub async fn create(
     }
 }
 
-pub async fn list(
-    _user: AuthenticatedUser,
-    State(state): State<AppState>,
-) -> impl IntoResponse {
+pub async fn list(_user: AuthenticatedUser, State(state): State<AppState>) -> impl IntoResponse {
     let service = AssetService::new(AssetRepository::new(state.pool.clone()));
 
     match service.list().await {

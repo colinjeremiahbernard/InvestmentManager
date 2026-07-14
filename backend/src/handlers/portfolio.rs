@@ -1,22 +1,20 @@
 use axum::{
+    Json,
     extract::{Path, State},
     http::StatusCode,
     response::IntoResponse,
-    Json,
 };
 use uuid::Uuid;
 
 use crate::{
     app::AppState,
     auth::extractor::AuthenticatedUser,
+    models::portfolio::{
+        AddPortfolioItemRequest, CreatePortfolioRequest, UpdatePortfolioItemRequest,
+        UpdatePortfolioRequest,
+    },
     repository::portfolio_repository::PortfolioRepository,
     services::portfolio_service::PortfolioService,
-    models::portfolio::{
-        CreatePortfolioRequest,
-        UpdatePortfolioRequest,
-        AddPortfolioItemRequest,
-        UpdatePortfolioItemRequest,
-    },
 };
 
 pub async fn create(
@@ -99,7 +97,10 @@ pub async fn update_item(
     Json(request): Json<UpdatePortfolioItemRequest>,
 ) -> impl IntoResponse {
     let service = PortfolioService::new(PortfolioRepository::new(state.pool.clone()));
-    match service.update_item(portfolio_id, item_id, user_id, request).await {
+    match service
+        .update_item(portfolio_id, item_id, user_id, request)
+        .await
+    {
         Ok(item) => (StatusCode::OK, Json(item)).into_response(),
         Err(e) => (StatusCode::BAD_REQUEST, e.to_string()).into_response(),
     }

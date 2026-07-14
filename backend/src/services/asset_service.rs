@@ -2,11 +2,7 @@ use uuid::Uuid;
 
 use crate::{
     error::app_error::AppError,
-    models::asset::{
-        Asset,
-        AssetResponse,
-        CreateAssetRequest,
-    },
+    models::asset::{Asset, AssetResponse, CreateAssetRequest},
     repository::asset_repository::AssetRepository,
 };
 
@@ -19,10 +15,7 @@ impl AssetService {
         Self { repository }
     }
 
-    pub async fn create(
-        &self,
-        mut request: CreateAssetRequest,
-    ) -> Result<AssetResponse, AppError> {
+    pub async fn create(&self, mut request: CreateAssetRequest) -> Result<AssetResponse, AppError> {
         request.symbol = request.symbol.to_uppercase();
 
         if self
@@ -34,7 +27,11 @@ impl AssetService {
             return Err(AppError::AssetAlreadyExists);
         }
 
-        let asset = self.repository.create(request).await.map_err(AppError::from)?;
+        let asset = self
+            .repository
+            .create(request)
+            .await
+            .map_err(AppError::from)?;
         Ok(asset_to_response(asset))
     }
 
@@ -44,7 +41,11 @@ impl AssetService {
     }
 
     pub async fn get(&self, id: Uuid) -> Result<Option<AssetResponse>, AppError> {
-        let asset = self.repository.find_by_id(id).await.map_err(AppError::from)?;
+        let asset = self
+            .repository
+            .find_by_id(id)
+            .await
+            .map_err(AppError::from)?;
         Ok(asset.map(asset_to_response))
     }
 
@@ -53,15 +54,23 @@ impl AssetService {
         id: Uuid,
         request: CreateAssetRequest,
     ) -> Result<AssetResponse, AppError> {
-        self.repository.find_by_id(id).await?
+        self.repository
+            .find_by_id(id)
+            .await?
             .ok_or(AppError::AssetNotFound)?;
 
-        let asset = self.repository.update(id, request).await.map_err(AppError::from)?;
+        let asset = self
+            .repository
+            .update(id, request)
+            .await
+            .map_err(AppError::from)?;
         Ok(asset_to_response(asset))
     }
 
     pub async fn delete(&self, id: Uuid) -> Result<(), AppError> {
-        self.repository.find_by_id(id).await?
+        self.repository
+            .find_by_id(id)
+            .await?
             .ok_or(AppError::AssetNotFound)?;
 
         self.repository.delete(id).await.map_err(AppError::from)

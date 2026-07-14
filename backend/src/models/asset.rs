@@ -27,16 +27,6 @@ pub struct CreateAssetRequest {
     pub current_price: Option<f64>,
 }
 
-#[derive(Debug, Deserialize)]
-pub struct UpdateAssetRequest {
-    pub name: String,
-    pub asset_type: String,
-    pub exchange: Option<String>,
-    pub currency: String,
-    pub current_price: f64,
-    pub is_active: bool,
-}
-
 #[derive(Debug, Serialize)]
 pub struct AssetResponse {
     pub id: Uuid,

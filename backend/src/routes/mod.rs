@@ -1,6 +1,6 @@
+use crate::app::AppState;
 use axum::Router;
 use tower_http::services::ServeDir;
-use crate::app::AppState;
 
 pub mod api;
 pub mod frontend;

@@ -1,17 +1,7 @@
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
-use sqlx::{FromRow, Type};
+use sqlx::FromRow;
 use uuid::Uuid;
-
-#[derive(Debug, Clone, Copy, Serialize, Deserialize, Type)]
-#[sqlx(type_name = "TEXT")]
-pub enum TransactionType {
-    BUY,
-    SELL,
-    DIVIDEND,
-    DEPOSIT,
-    WITHDRAWAL,
-}
 
 #[derive(Debug, Clone, Serialize, Deserialize, FromRow)]
 pub struct Transaction {

@@ -1,6 +1,6 @@
+use crate::models::asset::{Asset, CreateAssetRequest};
 use sqlx::PgPool;
 use uuid::Uuid;
-use crate::models::asset::{Asset, CreateAssetRequest};
 
 pub struct AssetRepository {
     pool: PgPool,
@@ -11,10 +11,7 @@ impl AssetRepository {
         Self { pool }
     }
 
-    pub async fn create(
-        &self,
-        request: CreateAssetRequest,
-    ) -> Result<Asset, sqlx::Error> {
+    pub async fn create(&self, request: CreateAssetRequest) -> Result<Asset, sqlx::Error> {
         sqlx::query_as::<_, Asset>(
             r#"
             INSERT INTO assets (symbol, name, asset_type, exchange, currency, current_price)
@@ -32,10 +29,7 @@ impl AssetRepository {
         .await
     }
 
-    pub async fn find_by_symbol(
-        &self,
-        symbol: &str,
-    ) -> Result<Option<Asset>, sqlx::Error> {
+    pub async fn find_by_symbol(&self, symbol: &str) -> Result<Option<Asset>, sqlx::Error> {
         sqlx::query_as::<_, Asset>(
             r#"
             SELECT id, symbol, name, asset_type, exchange, currency, current_price, is_active, created_at, updated_at
@@ -48,10 +42,7 @@ impl AssetRepository {
         .await
     }
 
-    pub async fn find_by_id(
-        &self,
-        id: Uuid,
-    ) -> Result<Option<Asset>, sqlx::Error> {
+    pub async fn find_by_id(&self, id: Uuid) -> Result<Option<Asset>, sqlx::Error> {
         sqlx::query_as::<_, Asset>(
             r#"
             SELECT id, symbol, name, asset_type, exchange, currency, current_price, is_active, created_at, updated_at

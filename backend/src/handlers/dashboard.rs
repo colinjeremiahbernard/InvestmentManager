@@ -1,14 +1,8 @@
-use axum::{
-    extract::State,
-    http::StatusCode,
-    response::IntoResponse,
-    Json,
-};
+use axum::{Json, extract::State, http::StatusCode, response::IntoResponse};
 use serde::Serialize;
 
 use crate::{
-    app::AppState,
-    auth::extractor::AuthenticatedUser,
+    app::AppState, auth::extractor::AuthenticatedUser,
     repository::portfolio_repository::PortfolioRepository,
     services::portfolio_service::PortfolioService,
 };

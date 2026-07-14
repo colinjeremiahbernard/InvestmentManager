@@ -1,12 +1,5 @@
 use chrono::{Duration, Utc};
-use jsonwebtoken::{
-    decode,
-    DecodingKey,
-    Validation,
-    encode,
-    EncodingKey,
-    Header,
-};
+use jsonwebtoken::{DecodingKey, EncodingKey, Header, Validation, decode, encode};
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
@@ -16,11 +9,7 @@ pub struct Claims {
     pub exp: usize,
 }
 
-pub fn create_token(
-    user_id: Uuid,
-    secret: &str,
-) -> Result<String, jsonwebtoken::errors::Error> {
-
+pub fn create_token(user_id: Uuid, secret: &str) -> Result<String, jsonwebtoken::errors::Error> {
     let expiration = Utc::now()
         .checked_add_signed(Duration::hours(24))
         .expect("valid timestamp")
@@ -37,10 +26,7 @@ pub fn create_token(
         &EncodingKey::from_secret(secret.as_bytes()),
     )
 }
-pub fn verify_token(
-    token: &str,
-    secret: &str,
-) -> Result<Claims, jsonwebtoken::errors::Error> {
+pub fn verify_token(token: &str, secret: &str) -> Result<Claims, jsonwebtoken::errors::Error> {
     let token_data = decode::<Claims>(
         token,
         &DecodingKey::from_secret(secret.as_bytes()),

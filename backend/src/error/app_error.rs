@@ -14,9 +14,6 @@ pub enum AppError {
     #[error("Database error: {0}")]
     Database(#[from] sqlx::Error),
 
-    #[error("Password hashing failed")]
-    PasswordHashing,
-
     #[error("Internal server error")]
     Internal,
 
@@ -35,9 +32,6 @@ pub enum AppError {
     #[error("Not authorized")]
     NotAuthorized,
 
-    #[error("Insufficient quantity")]
-    InsufficientQuantity,
-
-    #[error("Transaction not found")]
+     #[error("Transaction not found")]
     TransactionNotFound,
 }

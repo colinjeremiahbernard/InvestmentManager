@@ -1,11 +1,7 @@
 use sqlx::PgPool;
 use uuid::Uuid;
 
-use crate::models::transaction::{
-    Transaction,
-    CreateTransactionRequest,
-    UpdateTransactionRequest,
-};
+use crate::models::transaction::{CreateTransactionRequest, Transaction, UpdateTransactionRequest};
 
 pub struct TransactionRepository {
     pool: PgPool,
@@ -43,7 +39,7 @@ impl TransactionRepository {
                 notes,
                 created_at,
                 updated_at
-            "#
+            "#,
         )
         .bind(request.portfolio_id)
         .bind(request.asset_id)
@@ -56,10 +52,7 @@ impl TransactionRepository {
         .await
     }
 
-    pub async fn find_by_id(
-        &self,
-        id: Uuid,
-    ) -> Result<Option<Transaction>, sqlx::Error> {
+    pub async fn find_by_id(&self, id: Uuid) -> Result<Option<Transaction>, sqlx::Error> {
         sqlx::query_as::<_, Transaction>(
             r#"
             SELECT
@@ -75,17 +68,14 @@ impl TransactionRepository {
                 updated_at
             FROM transactions
             WHERE id = $1
-            "#
+            "#,
         )
         .bind(id)
         .fetch_optional(&self.pool)
         .await
     }
 
-    pub async fn list(
-        &self,
-        portfolio_id: Uuid,
-    ) -> Result<Vec<Transaction>, sqlx::Error> {
+    pub async fn list(&self, portfolio_id: Uuid) -> Result<Vec<Transaction>, sqlx::Error> {
         sqlx::query_as::<_, Transaction>(
             r#"
             SELECT
@@ -102,7 +92,7 @@ impl TransactionRepository {
             FROM transactions
             WHERE portfolio_id = $1
             ORDER BY created_at DESC
-            "#
+            "#,
         )
         .bind(portfolio_id)
         .fetch_all(&self.pool)
@@ -135,7 +125,7 @@ impl TransactionRepository {
                 notes,
                 created_at,
                 updated_at
-            "#
+            "#,
         )
         .bind(id)
         .bind(request.quantity)
@@ -146,16 +136,11 @@ impl TransactionRepository {
         .await
     }
 
-    pub async fn delete(
-        &self,
-        id: Uuid,
-    ) -> Result<(), sqlx::Error> {
-        sqlx::query(
-            "DELETE FROM transactions WHERE id = $1"
-        )
-        .bind(id)
-        .execute(&self.pool)
-        .await?;
+    pub async fn delete(&self, id: Uuid) -> Result<(), sqlx::Error> {
+        sqlx::query("DELETE FROM transactions WHERE id = $1")
+            .bind(id)
+            .execute(&self.pool)
+            .await?;
 
         Ok(())
     }

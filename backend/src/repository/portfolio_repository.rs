@@ -2,9 +2,8 @@ use sqlx::PgPool;
 use uuid::Uuid;
 
 use crate::models::portfolio::{
-    Portfolio, CreatePortfolioRequest,
-    PortfolioItem, AddPortfolioItemRequest,
-    UpdatePortfolioItemRequest, PortfolioItemResponse,
+    AddPortfolioItemRequest, CreatePortfolioRequest, Portfolio, PortfolioItem,
+    PortfolioItemResponse, UpdatePortfolioItemRequest,
 };
 
 pub struct PortfolioRepository {
@@ -26,7 +25,7 @@ impl PortfolioRepository {
             INSERT INTO portfolios (user_id, name, description)
             VALUES ($1, $2, $3)
             RETURNING id, user_id, name, description, created_at, updated_at
-            "#
+            "#,
         )
         .bind(user_id)
         .bind(request.name)
@@ -35,33 +34,27 @@ impl PortfolioRepository {
         .await
     }
 
-    pub async fn list_by_user(
-        &self,
-        user_id: Uuid,
-    ) -> Result<Vec<Portfolio>, sqlx::Error> {
+    pub async fn list_by_user(&self, user_id: Uuid) -> Result<Vec<Portfolio>, sqlx::Error> {
         sqlx::query_as::<_, Portfolio>(
             r#"
             SELECT id, user_id, name, description, created_at, updated_at
             FROM portfolios
             WHERE user_id = $1
             ORDER BY created_at DESC
-            "#
+            "#,
         )
         .bind(user_id)
         .fetch_all(&self.pool)
         .await
     }
 
-    pub async fn find_by_id(
-        &self,
-        id: Uuid,
-    ) -> Result<Option<Portfolio>, sqlx::Error> {
+    pub async fn find_by_id(&self, id: Uuid) -> Result<Option<Portfolio>, sqlx::Error> {
         sqlx::query_as::<_, Portfolio>(
             r#"
             SELECT id, user_id, name, description, created_at, updated_at
             FROM portfolios
             WHERE id = $1
-            "#
+            "#,
         )
         .bind(id)
         .fetch_optional(&self.pool)
@@ -80,7 +73,7 @@ impl PortfolioRepository {
             SET name = $2, description = $3, updated_at = NOW()
             WHERE id = $1
             RETURNING id, user_id, name, description, created_at, updated_at
-            "#
+            "#,
         )
         .bind(id)
         .bind(name)
@@ -151,17 +144,14 @@ impl PortfolioRepository {
             JOIN assets a ON a.id = pi.asset_id
             WHERE pi.portfolio_id = $1
             ORDER BY pi.created_at DESC
-            "#
+            "#,
         )
         .bind(portfolio_id)
         .fetch_all(&self.pool)
         .await
     }
 
-    pub async fn find_item_by_id(
-        &self,
-        id: Uuid,
-    ) -> Result<Option<PortfolioItem>, sqlx::Error> {
+    pub async fn find_item_by_id(&self, id: Uuid) -> Result<Option<PortfolioItem>, sqlx::Error> {
         sqlx::query_as::<_, PortfolioItem>(
             r#"
             SELECT id, portfolio_id, asset_id, quantity, purchase_price, notes, created_at, updated_at

@@ -25,27 +25,6 @@ pub struct UpdatePortfolioRequest {
     pub description: Option<String>,
 }
 
-#[derive(Debug, Serialize)]
-pub struct PortfolioResponse {
-    pub id: Uuid,
-    pub user_id: Uuid,
-    pub name: String,
-    pub description: Option<String>,
-    pub created_at: DateTime<Utc>,
-}
-
-impl From<Portfolio> for PortfolioResponse {
-    fn from(p: Portfolio) -> Self {
-        Self {
-            id: p.id,
-            user_id: p.user_id,
-            name: p.name,
-            description: p.description,
-            created_at: p.created_at,
-        }
-    }
-}
-
 #[derive(Debug, Clone, Serialize, Deserialize, FromRow)]
 pub struct PortfolioItem {
     pub id: Uuid,
