@@ -7,7 +7,7 @@ if (!token) {
 let chart = null;
 
 async function loadReport() {
-
+    console.log("Token", token);
     const response = await fetch("/api/reports", {
         headers: {
             Authorization: `Bearer ${token}`

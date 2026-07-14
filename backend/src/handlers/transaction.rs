@@ -1,5 +1,5 @@
 use axum::{
-    extract::{Path, Query, State},
+    extract::{Path, State},
     http::StatusCode,
     response::IntoResponse,
     Json,
@@ -55,7 +55,6 @@ pub async fn create(
 pub async fn list(
     AuthenticatedUser(user_id): AuthenticatedUser,
     State(state): State<AppState>,
-    Query(query): Query<TransactionQuery>,
 ) -> impl IntoResponse {
 
     let service = TransactionService::new(
@@ -63,7 +62,7 @@ pub async fn list(
         PortfolioRepository::new(state.pool.clone()),
     );
 
-    match service.list(query.portfolio_id, user_id).await {
+    match service.list(user_id).await {
         Ok(transactions) => (
             StatusCode::OK,
             Json(transactions),

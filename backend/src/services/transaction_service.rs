@@ -53,54 +53,53 @@ impl TransactionService {
         Ok(transaction.into())
     }
 
-    pub async fn list(
-        &self,
-        portfolio_id: Uuid,
-        user_id: Uuid,
-    ) -> Result<Vec<TransactionResponse>, AppError> {
+  pub async fn list(
+    &self,
+    user_id: Uuid,
+) -> Result<Vec<TransactionResponse>, AppError> {
 
-        let portfolio = self
-            .portfolio_repository
-            .find_by_id(portfolio_id)
-            .await?
-            .ok_or(AppError::PortfolioNotFound)?;
+    let portfolios = self
+        .portfolio_repository
+        .list_by_user(user_id)
+        .await?;
 
-        if portfolio.user_id != user_id {
-            return Err(AppError::NotAuthorized);
-        }
+    let mut all_transactions = Vec::new();
 
-        let transactions = self
+    for portfolio in portfolios {
+        let mut transactions = self
             .transaction_repository
-            .list(portfolio_id)
+            .list(portfolio.id)
             .await?;
 
-        Ok(transactions.into_iter().map(Into::into).collect())
+        all_transactions.append(&mut transactions);
     }
 
-    pub async fn get(
-        &self,
-        id: Uuid,
-        user_id: Uuid,
-    ) -> Result<TransactionResponse, AppError> {
+    Ok(all_transactions.into_iter().map(Into::into).collect())
+}
+pub async fn get(
+    &self,
+    id: Uuid,
+    user_id: Uuid,
+) -> Result<TransactionResponse, AppError> {
 
-        let transaction = self
-            .transaction_repository
-            .find_by_id(id)
-            .await?
-            .ok_or(AppError::TransactionNotFound)?;
+    let transaction = self
+        .transaction_repository
+        .find_by_id(id)
+        .await?
+        .ok_or(AppError::TransactionNotFound)?;
 
-        let portfolio = self
-            .portfolio_repository
-            .find_by_id(transaction.portfolio_id)
-            .await?
-            .ok_or(AppError::PortfolioNotFound)?;
+    let portfolio = self
+        .portfolio_repository
+        .find_by_id(transaction.portfolio_id)
+        .await?
+        .ok_or(AppError::PortfolioNotFound)?;
 
-        if portfolio.user_id != user_id {
-            return Err(AppError::NotAuthorized);
-        }
-
-        Ok(transaction.into())
+    if portfolio.user_id != user_id {
+        return Err(AppError::NotAuthorized);
     }
+
+    Ok(transaction.into())
+}
 
     pub async fn update(
         &self,

@@ -15,8 +15,9 @@ async function loadTransactions() {
 
     try {
 
+       
         const response = await fetch(
-            "/api/transactions",
+            `/api/transactions`,
             { headers }
         );
 

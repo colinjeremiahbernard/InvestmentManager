@@ -62,6 +62,10 @@ pub async fn summary(
     } else {
         gain / total_invested * 100.0
     };
+    println!("Total Invested: {}", total_invested);
+    println!("Total Value: {}", total_value);
+    println!("Gain: {}", gain);
+    println!("Portfolios: {:?}", chart);
 
     Json(serde_json::json!({
 
